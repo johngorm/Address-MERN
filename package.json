@@ -13,6 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.12.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
     "geocoder": "^0.2.2",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
