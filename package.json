@@ -5,7 +5,7 @@
   "main": "public/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack & node server",
+    "dev": "webpack -w & nodemon server",
     "start": "node server",
     "build": "webpack"
   },
@@ -14,6 +14,7 @@
   "dependencies": {
     "axios": "^0.12.0",
     "geocoder": "^0.2.2",
+    "mongoose": "^4.10.6",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "request": "^2.72.0",
