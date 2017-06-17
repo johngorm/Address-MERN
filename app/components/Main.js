@@ -14,46 +14,53 @@ var Main = React.createClass({
 
   // Here we set a generic state associated with the number of clicks
   getInitialState: function() {
-    return { searchTerm: "", results: ""};
+    return { searchTerm: "", results: "", history: []};
+  },
+
+  componentDidMount: function() {
+    console.log("COMPONENT MOUNTED");
+
+    // Get the latest history.
+    helpers.getLast5().then(function(response) {
+      console.log(response);
+      if (response !== this.state.history) {
+        console.log("History", response.data);
+        this.setState({ history: response.data });
+      }
+    }.bind(this));
   },
 
   // If the component updates we'll run this code
   componentDidUpdate: function(prevProps, prevState) {
 
-    if (prevState.searchTerm !== this.state.searchTerm) {
-      console.log("UPDATED");
+    // Run the query for the address
+    helpers.runQuery(this.state.searchTerm).then(function(data) {
+      if (data !== this.state.results) {
+        console.log("Address", data);
+        this.setState({ results: data });
 
-      helpers.runQuery(this.state.searchTerm).then(function(data) {
-        if (data !== this.state.results) {
-          console.log("HERE");
-          console.log(data);
+        // After we've received the result... then post the search term to our history.
+        helpers.postHistory(this.state.searchTerm).then(function() {
+          console.log("Updated!");
 
-          this.setState({ results: data });
-        }
+          // After we've done the post... then get the updated history
+          helpers.getHistory().then(function(response) {
+            console.log("Current History", response.data);
 
-        helpers.saveQuery({query: this.state.searchTerm, address: data})
-        // This code is necessary to bind the keyword "this" when we say this.setState
-        // to actually mean the component itself and not the runQuery function.
-      }.bind(this));
-    }
+            console.log("History", response.data);
+
+            this.setState({ history: response.data });
+
+          }.bind(this));
+        }.bind(this));
+      }
+    }.bind(this));
   },
   // We use this function to allow children to update the parent with searchTerms.
   setTerm: function(term) {
     this.setState({ searchTerm: term });
   },
-  componentDidMount: function() {
-    console.log("COMPONENT MOUNTED");
-
-    // The moment the page renders on page load, we will retrieve the previous click count.
-    // We will then utilize that click count to change the value of the click state.
-    helpers.getLast5()
-      .then(function(response) {
-        console.log(response)
-        this.setState({
-          last5Queries: response.data
-        });
-      }.bind(this));
-  },
+  
 
   // Here we describe this component's render method
   render: function() {
@@ -83,7 +90,7 @@ var Main = React.createClass({
 
         </div>
         <div className='row'>
-          <History queries={this.state.last5Queries}/>
+          <History history={this.state.history}/>
         </div>
 
       </div>

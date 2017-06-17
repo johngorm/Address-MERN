@@ -47,7 +47,9 @@ app.get("/api/:count?", function(req, res) {
   var count = parseInt(req.params.count);
 
   if (count) {
-    Address.find({}).limit(count).exec(function(err, doc) {
+    Address.find({}).sort([
+    ["date", "descending"]
+  ]).limit(count).exec(function(err, doc) {
 
       if (err) {
         console.log(err);

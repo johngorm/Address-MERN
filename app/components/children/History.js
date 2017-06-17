@@ -9,7 +9,13 @@ const History = React.createClass({
           <h3 className="panel-title text-center">Search Hisotry</h3>
         </div>
         <div className="panel-body text-center">
-        <p>{this.props.last5}</p>
+
+          {/* Here we use a map function to loop through an array in JSX */}
+          {this.props.history.map(function(search, i) {
+            return (
+              <p key={i}>{search.query} - {search.date}</p>
+            );
+          })}
         </div>
     </div>
 
