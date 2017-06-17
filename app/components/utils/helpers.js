@@ -20,6 +20,15 @@ var helpers = {
       return response.data.results[0].formatted;
     });
 
+  },
+
+  getLast5: function(){
+  	return axios.get('/api/5').then(function(response){
+  		console.log(response);
+  	});
+  },
+  saveQuery: function(queryData) {
+    return axios.post("/api", queryData);
   }
 
 };

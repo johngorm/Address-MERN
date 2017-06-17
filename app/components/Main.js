@@ -14,7 +14,7 @@ var Main = React.createClass({
 
   // Here we set a generic state associated with the number of clicks
   getInitialState: function() {
-    return { searchTerm: "", results: "" };
+    return { searchTerm: "", results: ""};
   },
 
   // If the component updates we'll run this code
@@ -31,6 +31,7 @@ var Main = React.createClass({
           this.setState({ results: data });
         }
 
+        helpers.saveQuery({query: this.state.searchTerm, address: data})
         // This code is necessary to bind the keyword "this" when we say this.setState
         // to actually mean the component itself and not the runQuery function.
       }.bind(this));
@@ -39,6 +40,19 @@ var Main = React.createClass({
   // We use this function to allow children to update the parent with searchTerms.
   setTerm: function(term) {
     this.setState({ searchTerm: term });
+  },
+  componentDidMount: function() {
+    console.log("COMPONENT MOUNTED");
+
+    // The moment the page renders on page load, we will retrieve the previous click count.
+    // We will then utilize that click count to change the value of the click state.
+    helpers.getLast5()
+      .then(function(response) {
+        console.log(response)
+        this.setState({
+          last5Queries: response.data
+        });
+      }.bind(this));
   },
 
   // Here we describe this component's render method
@@ -69,7 +83,7 @@ var Main = React.createClass({
 
         </div>
         <div className='row'>
-          <History />
+          <History queries={this.state.last5Queries}/>
         </div>
 
       </div>

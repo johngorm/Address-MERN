@@ -42,17 +42,30 @@ app.get("/", function(req, res) {
   res.sendFile(__dirname + "/public/index.html");
 });
 
-app.get("/api", function(req, res) {
+app.get("/api/:count?", function(req, res) {
 
-  Address.find({}).exec(function(err, doc) {
+  var count = parseInt(req.params.count);
 
-    if (err) {
-      console.log(err);
-    }
-    else {
-      res.send(doc);
-    }
-  });
+  if (count) {
+    Address.find({}).limit(count).exec(function(err, doc) {
+
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(doc);
+      }
+    });
+  } else {
+
+    Address.find({}).exec(function(err, doc) {
+
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(doc);
+      }
+    });
+  }
 });
 
 app.post("/api", function(req, res) {
@@ -70,8 +83,7 @@ app.post("/api", function(req, res) {
 
     if (err) {
       console.log(err);
-    }
-    else {
+    } else {
       res.send("Updated Query Address and date!!");
     }
   });

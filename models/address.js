@@ -18,7 +18,7 @@ var AddressSchema = new Schema({
 });
 
 // Create the Model
-var Address = mongoose.model("Click", AddressSchema);
+var Address = mongoose.model("Address", AddressSchema);
 
 // Export it for use elsewhere
 module.exports = Address;
